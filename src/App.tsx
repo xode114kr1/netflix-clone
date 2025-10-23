@@ -1,7 +1,14 @@
 import './App.css';
+import Banner from './components/Banner';
+import Nav from './components/Nav';
 
 function App() {
-  return <>App</>;
+  return (
+    <>
+      <Nav />
+      <Banner />
+    </>
+  );
 }
 
 export default App;
