@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { RowProps } from '../models/components/Row';
 import instance from '../api/axios';
 import type { IMovie } from '../models/tmdb';
@@ -113,22 +113,36 @@ export default function Row({
   isLargeRow = false,
 }: RowProps) {
   const [movies, setMovies] = useState<IMovie[]>([]);
+  const scrollerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchMovieData();
   }, []);
+
   const fetchMovieData = async () => {
     const request = await instance.get(fetchUrl);
     setMovies(request?.data?.results);
   };
+
+  const scrollByPage = (dir: 'left' | 'right') => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const vw = typeof window !== 'undefined' ? window.innerWidth : 1024;
+    const amount = Math.max(320, vw - 80);
+    el.scrollBy({
+      left: dir === 'left' ? -amount : amount,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <RowContanier>
       <h2>{title}</h2>
       <SliderContanier>
-        <SlicerArrowLeft>
+        <SlicerArrowLeft onClick={() => scrollByPage('left')}>
           <Arrow>{'<'}</Arrow>
         </SlicerArrowLeft>
-        <RowPosterContaneier>
+        <RowPosterContaneier id={id} ref={scrollerRef}>
           {movies.map((movie) => (
             <RowPosterImg
               key={movie.id}
@@ -140,7 +154,7 @@ export default function Row({
             />
           ))}
         </RowPosterContaneier>
-        <SlicerArrowRight>
+        <SlicerArrowRight onClick={() => scrollByPage('right')}>
           <Arrow>{'>'}</Arrow>
         </SlicerArrowRight>
       </SliderContanier>
