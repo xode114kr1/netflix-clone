@@ -72,6 +72,7 @@ export interface IMovieSummary {
   release_date: string;
   title: string;
   video: boolean;
+  videos: any;
   vote_average: number;
   vote_count: number;
 }
