@@ -1,13 +1,3 @@
-# Lawn-Garden-Frontend
-
-매일매일 잔디를 심자, 잔디정원 프론트엔드
-
-🚧 잔디정원은 재개발중입니다. 뚝딱뚝딱🚧
-
-## Stack
-
-Vite / React / TypeScript / Zustand / Styled components
-
 ## Commit Convention
 
 커밋은 세세하게, "feat: 수정사항" 으로 작성 부탁드립니다.
