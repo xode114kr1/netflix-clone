@@ -31,8 +31,8 @@ const SlicerArrowLeft = styled.div`
   top: 50%;
   position: absolute;
   left: 20px;
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 5px;
   display: flex;
@@ -42,7 +42,8 @@ const SlicerArrowLeft = styled.div`
 
   &:hover {
     transition: 400ms all ease-in-out;
-    transform: scale(1.2);
+    background: rgba(255, 255, 255, 0.6);
+    color: black;
   }
 `;
 
@@ -50,8 +51,8 @@ const SlicerArrowRight = styled.div`
   position: absolute;
   top: 50%;
   right: 0px;
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 5px;
   display: flex;
@@ -61,7 +62,8 @@ const SlicerArrowRight = styled.div`
 
   &:hover {
     transition: 400ms all ease-in;
-    transform: scale(1.2);
+    background: rgba(255, 255, 255, 0.6);
+    color: black;
   }
 `;
 
