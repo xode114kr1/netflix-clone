@@ -128,8 +128,35 @@ const BannerButton = styled.button<BannerButtonProps>`
   }
 `;
 
+const VideoContanier = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+`;
+
+const IFrame = styled.iframe`
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.85;
+  border: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+`;
+
 export default function Banner() {
   const [movie, setMovie] = useState<IMovieSummary>();
+  const [isPlayVideo, setIsPlayVideo] = useState<boolean>(false);
 
   const truncate = (str: string | undefined, n: number) => {
     if (!str) return '';
@@ -139,7 +166,6 @@ export default function Banner() {
   useEffect(() => {
     fetchData();
   }, []);
-
   const fetchData = async () => {
     const request = await instance.get(requests.fetchNowPlaying);
     const movieId =
@@ -150,19 +176,37 @@ export default function Banner() {
     const { data: movieDetail } = await instance.get(`movie/${movieId}`, {
       params: { append_to_response: 'videos' },
     });
+
     setMovie(movieDetail);
   };
-
-  return (
-    <BannerContanier $backgroundImg={movie?.backdrop_path ?? ''}>
-      <BannerTextContanier>
-        <h1>{movie?.title || movie?.original_title}</h1>
-        <BannerButtonContanier>
-          <BannerButton $variant="play">Play</BannerButton>
-          <BannerButton $variant="info">More Information</BannerButton>
-        </BannerButtonContanier>
-        <BannerDescription>{truncate(movie?.overview, 100)}</BannerDescription>
-      </BannerTextContanier>
-    </BannerContanier>
-  );
+  if (!isPlayVideo) {
+    return (
+      <BannerContanier $backgroundImg={movie?.backdrop_path ?? ''}>
+        <BannerTextContanier>
+          <h1>{movie?.title || movie?.original_title}</h1>
+          <BannerButtonContanier>
+            <BannerButton $variant="play" onClick={() => setIsPlayVideo(true)}>
+              Play
+            </BannerButton>
+            <BannerButton $variant="info">More Information</BannerButton>
+          </BannerButtonContanier>
+          <BannerDescription>
+            {truncate(movie?.overview, 100)}
+          </BannerDescription>
+        </BannerTextContanier>
+      </BannerContanier>
+    );
+  } else {
+    return (
+      <VideoContanier>
+        <IFrame
+          width="640"
+          height="360"
+          src={`https://www.youtube.com/embed/${movie?.videos?.results[0]?.key}?contrils=0&autoplay=1&loop=1&mute=1`}
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        ></IFrame>
+      </VideoContanier>
+    );
+  }
 }
