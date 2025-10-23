@@ -1,11 +1,147 @@
+import { useEffect, useState } from 'react';
 import type { RowProps } from '../models/components/Row';
+import instance from '../api/axios';
+import type { IMovie } from '../models/tmdb';
+import styled from 'styled-components';
 
-export default function Row({ title, id, fetchUrl, isLargeRow }: RowProps) {
+interface RowPosterImgProps {
+  $isLargeRow: boolean;
+}
+
+const RowContanier = styled.section`
+  margin-left: 20px;
+  color: white;
+
+  h2 {
+    padding-left: 20px;
+  }
+`;
+
+const SliderContanier = styled.div`
+  position: relative;
+
+  &:hover .SlicerArrowLeft,
+  &:hover .SlicerArrowRight {
+    transition: 400ms all ease-in-out;
+    visibility: visible;
+  }
+`;
+
+const SlicerArrowLeft = styled.div`
+  top: 50%;
+  position: absolute;
+  left: 20px;
+  width: 30px;
+  height: 30px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+
+  &:hover {
+    transition: 400ms all ease-in-out;
+    transform: scale(1.2);
+  }
+`;
+
+const SlicerArrowRight = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  width: 30px;
+  height: 30px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+
+  &:hover {
+    transition: 400ms all ease-in;
+    transform: scale(1.2);
+  }
+`;
+
+const Arrow = styled.span`
+  transition: 400ms all ease-in-out;
+`;
+
+const RowPosterContaneier = styled.div`
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  padding: 20px 0 20px 20px;
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const RowPosterImg = styled.img<RowPosterImgProps>`
+  object-fit: contain;
+  width: 100%;
+  max-height: ${({ $isLargeRow }) => ($isLargeRow ? 320 : 144)}px;
+  margin-right: 10px;
+  transition: transform 450ms;
+  border-radius: 4px;
+
+  &:hover {
+    transform: ${({ $isLargeRow }) =>
+      $isLargeRow ? 'scale(1.1)' : 'scale(1.08)'};
+    opacity: 1;
+  }
+
+  @media screen and (min-width: 1200px) {
+    max-height: ${({ $isLargeRow }) => ($isLargeRow ? 360 : 160)}px;
+  }
+
+  @media screen and (max-width: 768px) {
+    max-height: ${({ $isLargeRow }) => ($isLargeRow ? 280 : 100)}px;
+  }
+`;
+
+export default function Row({
+  title,
+  id,
+  fetchUrl,
+  isLargeRow = false,
+}: RowProps) {
+  const [movies, setMovies] = useState<IMovie[]>([]);
+
+  useEffect(() => {
+    fetchMovieData();
+  }, []);
+  const fetchMovieData = async () => {
+    const request = await instance.get(fetchUrl);
+    setMovies(request?.data?.results);
+  };
   return (
-    <div>
-      {title}
-      {id}
-      {fetchUrl}
-    </div>
+    <RowContanier>
+      <h2>{title}</h2>
+      <SliderContanier>
+        <SlicerArrowLeft>
+          <Arrow>{'<'}</Arrow>
+        </SlicerArrowLeft>
+        <RowPosterContaneier>
+          {movies.map((movie) => (
+            <RowPosterImg
+              key={movie.id}
+              $isLargeRow={isLargeRow}
+              src={`https://image.tmdb.org/t/p/original/${
+                isLargeRow ? movie.poster_path : movie.backdrop_path
+              }`}
+              alt={movie.name}
+            />
+          ))}
+        </RowPosterContaneier>
+        <SlicerArrowRight>
+          <Arrow>{'>'}</Arrow>
+        </SlicerArrowRight>
+      </SliderContanier>
+    </RowContanier>
   );
 }
