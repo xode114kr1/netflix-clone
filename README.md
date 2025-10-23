@@ -1,73 +1,26 @@
-# React + TypeScript + Vite
+# Lawn-Garden-Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+매일매일 잔디를 심자, 잔디정원 프론트엔드
 
-Currently, two official plugins are available:
+🚧 잔디정원은 재개발중입니다. 뚝딱뚝딱🚧
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Stack
 
-## React Compiler
+Vite / React / TypeScript / Zustand / Styled components
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Commit Convention
 
-## Expanding the ESLint configuration
+커밋은 세세하게, "feat: 수정사항" 으로 작성 부탁드립니다.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+브랜치도 아래와 같은 기준으로 나눠주세요
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+| Type         | 설명                                                    |
+| ------------ | ------------------------------------------------------- |
+| **feat**     | 새로운 기능 추가                                        |
+| **fix**      | 버그 수정                                               |
+| **refactor** | 코드 리팩토링 (기능 변경 없음)                          |
+| **design**   | UI/스타일 변경 (CSS, styled-components 등)              |
+| **docs**     | 문서 수정 (README, 주석, API 문서 등)                   |
+| **style**    | 코드 포맷팅 (세미콜론, 들여쓰기 등 로직 영향 없는 변경) |
+| **test**     | 테스트 코드 추가/수정                                   |
+| **chore**    | 빌드/배포/환경설정 관련 작업                            |
