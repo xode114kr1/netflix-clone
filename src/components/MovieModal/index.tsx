@@ -1,5 +1,5 @@
-import styled, { keyframes } from "styled-components";
-import type { MovieModalProps } from "../../models/components/Modal";
+import styled, { keyframes } from 'styled-components';
+import type { MovieModalProps } from '../../models/components/Modal';
 
 const fadeIn = keyframes`
   from {
