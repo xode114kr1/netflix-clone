@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface NavContainerProps {
@@ -38,8 +39,27 @@ const NavUserImg = styled.img`
   object-fit: contain;
 `;
 
+const SearchInput = styled.input`
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: rgb(0, 0, 0, 0.65);
+  border-radius: 5px;
+  color: white;
+  padding: 5px;
+  border: none;
+`;
+
 export default function Nav() {
   const [show, setShow] = useState<boolean>(false);
+  const [searchValue, SetSearchValue] = useState<string>('');
+
+  const navigate = useNavigate();
+
+  const handleSearchInput = (value: string) => {
+    SetSearchValue(value);
+    navigate(`search?q=${value}`);
+  };
 
   useEffect(() => {
     window.addEventListener('scroll', () => {
@@ -59,7 +79,12 @@ export default function Nav() {
       <NavLogoImg
         alt="Netflix Logo"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/250px-Netflix_2015_logo.svg.png"
-        onClick={() => window.location.reload()}
+        onClick={() => navigate('./')}
+      />
+      <SearchInput
+        value={searchValue}
+        placeholder="영화를 입력해주세요"
+        onChange={(e) => handleSearchInput(e.target.value)}
       />
       <NavUserImg
         alt="User logged"
