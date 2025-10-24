@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import instance from '../../api/axios';
 import { useEffect, useState } from 'react';
 import type { IMovie } from '../../models/tmdb';
@@ -45,6 +45,8 @@ const NoResultText = styled.div``;
 export default function SearchPage() {
   const [searchResults, setSearchResults] = useState<IMovie[]>([]);
 
+  const navigate = useNavigate();
+
   const useQuery = () => {
     return new URLSearchParams(useLocation().search);
   };
@@ -79,7 +81,7 @@ export default function SearchPage() {
             const movieImageUrl = `http://image.tmdb.org/t/p/w500${movie.backdrop_path}`;
             return (
               <Movie key={movie.id}>
-                <MovieColumnPoster>
+                <MovieColumnPoster onClick={() => navigate(`/${movie.id}`)}>
                   <MoviePosterImg src={movieImageUrl} alt="movie image" />
                 </MovieColumnPoster>
               </Movie>
