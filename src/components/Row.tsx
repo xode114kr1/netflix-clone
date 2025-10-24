@@ -3,6 +3,7 @@ import type { RowProps } from '../models/components/Row';
 import instance from '../api/axios';
 import type { IMovie } from '../models/tmdb';
 import styled from 'styled-components';
+import MovieModal from './MovieModal';
 
 interface RowPosterImgProps {
   $isLargeRow: boolean;
@@ -113,6 +114,9 @@ export default function Row({
   isLargeRow = false,
 }: RowProps) {
   const [movies, setMovies] = useState<IMovie[]>([]);
+  const [idModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [movieSelected, setMovieSelected] = useState<IMovie | null>(null);
+
   const scrollerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -135,6 +139,11 @@ export default function Row({
     });
   };
 
+  const handleOpenModal = (movie: IMovie) => {
+    setIsModalOpen(true);
+    setMovieSelected(movie);
+  };
+
   return (
     <RowContanier>
       <h2>{title}</h2>
@@ -151,6 +160,7 @@ export default function Row({
                 isLargeRow ? movie.poster_path : movie.backdrop_path
               }`}
               alt={movie.name}
+              onClick={() => handleOpenModal(movie)}
             />
           ))}
         </RowPosterContaneier>
@@ -158,6 +168,9 @@ export default function Row({
           <Arrow>{'>'}</Arrow>
         </SlicerArrowRight>
       </SliderContanier>
+      {idModalOpen && movieSelected && (
+        <MovieModal movie={movieSelected} setIsModalOpen={setIsModalOpen} />
+      )}
     </RowContanier>
   );
 }
