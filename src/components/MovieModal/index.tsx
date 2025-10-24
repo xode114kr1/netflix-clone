@@ -1,5 +1,7 @@
 import styled, { keyframes } from 'styled-components';
 import type { MovieModalProps } from '../../models/components/Modal';
+import { useRef } from 'react';
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 
 const fadeIn = keyframes`
   from {
@@ -121,14 +123,15 @@ const ModalOverView = styled.p`
 `;
 
 export default function MovieModal({ movie, setIsModalOpen }: MovieModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+  useOnClickOutside(modalRef, () => {
+    setIsModalOpen(false);
+  });
+
   return (
     <MovieModalContanier>
-      <ModalWapper
-        onClick={(e) => {
-          if (e.target === e.currentTarget) setIsModalOpen(false);
-        }}
-      >
-        <Modal>
+      <ModalWapper>
+        <Modal ref={modalRef}>
           <ModalClose onClick={() => setIsModalOpen(false)}>X</ModalClose>
           <ModalPosterImg
             src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
