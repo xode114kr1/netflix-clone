@@ -3,6 +3,7 @@ import instance from '../../api/axios';
 import { useEffect, useState } from 'react';
 import type { IMovie } from '../../models/tmdb';
 import styled from 'styled-components';
+import { useDebounce } from '../../hooks/useDebounce';
 
 const SearchContanier = styled.section`
   background-color: black;
@@ -50,6 +51,7 @@ export default function SearchPage() {
   let query = useQuery();
 
   const searchTerm = query.get('q');
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const fetchSearchMovie = async (searchTerm: string) => {
     try {
@@ -63,10 +65,11 @@ export default function SearchPage() {
   };
 
   useEffect(() => {
-    if (searchTerm) {
-      fetchSearchMovie(searchTerm);
+    console.log(debouncedSearchTerm);
+    if (debouncedSearchTerm) {
+      fetchSearchMovie(debouncedSearchTerm);
     }
-  }, [searchTerm]);
+  }, [debouncedSearchTerm]);
 
   const renderSearchResults = () => {
     return searchResults.length > 0 ? (
