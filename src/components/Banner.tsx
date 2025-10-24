@@ -134,13 +134,13 @@ const VideoContanier = styled.section`
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  height: 448px;
 `;
 
 const IFrame = styled.iframe`
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: 1;
   opacity: 0.85;
   border: none;
 
@@ -202,7 +202,7 @@ export default function Banner() {
         <IFrame
           width="640"
           height="360"
-          src={`https://www.youtube.com/embed/${movie?.videos?.results[0]?.key}?contrils=0&autoplay=1&loop=1&mute=1`}
+          src={`https://www.youtube.com/embed/${movie?.videos?.results[0]?.key}?controls=0&autoplay=1&loop=1&mute=1`}
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         ></IFrame>
