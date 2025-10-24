@@ -5,6 +5,15 @@ import type { IMovie } from '../models/tmdb';
 import styled from 'styled-components';
 import MovieModal from './MovieModal';
 
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+
 interface RowPosterImgProps {
   $isLargeRow: boolean;
 }
@@ -16,60 +25,6 @@ const RowContanier = styled.section`
   h2 {
     padding-left: 20px;
   }
-`;
-
-const SliderContanier = styled.div`
-  position: relative;
-
-  &:hover .SlicerArrowLeft,
-  &:hover .SlicerArrowRight {
-    transition: 400ms all ease-in-out;
-    visibility: visible;
-  }
-`;
-
-const SlicerArrowLeft = styled.div`
-  top: 50%;
-  position: absolute;
-  left: 20px;
-  width: 35px;
-  height: 35px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-
-  &:hover {
-    transition: 400ms all ease-in-out;
-    background: rgba(255, 255, 255, 0.6);
-    color: black;
-  }
-`;
-
-const SlicerArrowRight = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 0px;
-  width: 35px;
-  height: 35px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-
-  &:hover {
-    transition: 400ms all ease-in;
-    background: rgba(255, 255, 255, 0.6);
-    color: black;
-  }
-`;
-
-const Arrow = styled.span`
-  transition: 400ms all ease-in-out;
 `;
 
 const RowPosterContaneier = styled.div`
@@ -107,6 +62,25 @@ const RowPosterImg = styled.img<RowPosterImgProps>`
   }
 `;
 
+const breakpoints = {
+  1378: {
+    slidesPerView: 6,
+    slidesPerGroup: 6,
+  },
+  998: {
+    slidesPerView: 5,
+    slidesPerGroup: 5,
+  },
+  625: {
+    slidesPerView: 4,
+    slidesPerGroup: 4,
+  },
+  0: {
+    slidesPerView: 3,
+    slidesPerGroup: 3,
+  },
+};
+
 export default function Row({
   title,
   id,
@@ -128,17 +102,6 @@ export default function Row({
     setMovies(request?.data?.results);
   };
 
-  const scrollByPage = (dir: 'left' | 'right') => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const vw = typeof window !== 'undefined' ? window.innerWidth : 1024;
-    const amount = Math.max(320, vw - 80);
-    el.scrollBy({
-      left: dir === 'left' ? -amount : amount,
-      behavior: 'smooth',
-    });
-  };
-
   const handleOpenModal = (movie: IMovie) => {
     setIsModalOpen(true);
     setMovieSelected(movie);
@@ -147,27 +110,29 @@ export default function Row({
   return (
     <RowContanier>
       <h2>{title}</h2>
-      <SliderContanier>
-        <SlicerArrowLeft onClick={() => scrollByPage('left')}>
-          <Arrow>{'<'}</Arrow>
-        </SlicerArrowLeft>
+      <Swiper
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        navigation
+        loop={true}
+        pagination={{ clickable: true }}
+        breakpoints={breakpoints}
+      >
         <RowPosterContaneier id={id} ref={scrollerRef}>
           {movies.map((movie) => (
-            <RowPosterImg
-              key={movie.id}
-              $isLargeRow={isLargeRow}
-              src={`https://image.tmdb.org/t/p/original/${
-                isLargeRow ? movie.poster_path : movie.backdrop_path
-              }`}
-              alt={movie.name}
-              onClick={() => handleOpenModal(movie)}
-            />
+            <SwiperSlide>
+              <RowPosterImg
+                key={movie.id}
+                $isLargeRow={isLargeRow}
+                src={`https://image.tmdb.org/t/p/original/${
+                  isLargeRow ? movie.poster_path : movie.backdrop_path
+                }`}
+                alt={movie.name}
+                onClick={() => handleOpenModal(movie)}
+              />
+            </SwiperSlide>
           ))}
         </RowPosterContaneier>
-        <SlicerArrowRight onClick={() => scrollByPage('right')}>
-          <Arrow>{'>'}</Arrow>
-        </SlicerArrowRight>
-      </SliderContanier>
+      </Swiper>
       {idModalOpen && movieSelected && (
         <MovieModal movie={movieSelected} setIsModalOpen={setIsModalOpen} />
       )}
