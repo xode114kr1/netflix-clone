@@ -10,7 +10,7 @@ const NavContanier = styled.nav<NavContainerProps>`
   top: 0;
   width: 100%;
   height: 30px;
-  z-index: 1;
+  z-index: 3;
   padding: 20px;
   display: flex;
   justify-content: space-between;
@@ -18,6 +18,10 @@ const NavContanier = styled.nav<NavContainerProps>`
   transition: all 0.5s ease-in;
 
   background-color: ${(props) => (props.$show ? '#111' : 'transparent')};
+
+  &:hover {
+    background-color: #111;
+  }
 `;
 
 const NavLogoImg = styled.img`
